@@ -7,6 +7,7 @@ import Button_component from "./Button_component";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useLogin } from "@/components/useAuthHook";
+import { toast } from "react-toastify";
 const LoginComponent = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,10 +18,10 @@ const LoginComponent = () => {
   const handleLogin = async () => {
     try {
       if (!email || !password) {
-        return alert("Please provide both email and password.");
+        return toast.info("Please provide both email and password.");
       }
       if((!email.includes('@gmail.com')) || (!email.includes('@tothenew.com'))){
-        return alert('Currently we will allowed only gmail and tothenew domain for signup/login');
+        return toast.info('Currently we will allowed only gmail and tothenew domain for signup/login');
       }
       const res = await fetch(`http://localhost:5000/api/v1/auth/login`, {
         method: "POST",
@@ -33,24 +34,22 @@ const LoginComponent = () => {
 
       if (res.ok) {
         await fetchUser() ;
-        alert("Login successful");
+        toast.success("Login successful");
         router.push("/appointment"); 
       } else {
-        alert(result.message || "Incorrect credentials");
+        toast.error(result.message || "Incorrect credentials");
       }
     } catch (err) {
       console.error("Login error:", err);
-      alert("An error occurred. Please try again.");
+      toast.error("An error occurred. Please try again.");
     }
-  };
-  const handleGoogleLogin = () => {
-    window.location.href = `http://localhost:5000/api/v1/auth/google`;
   };
 
   
   const handleReset = () => {
     setEmail("");
     setPassword("");
+    toast.success('Reset Successful');
   };
 
 
@@ -66,21 +65,8 @@ const LoginComponent = () => {
       />
       <div className={styles.fields}>
         <div className={styles["login-type"]}>
-          <h6>Login</h6>
-          <button
-            type="button"
-            onClick={handleGoogleLogin}
-            className={styles["login-with-google-btn"]}
-          >
-            Sign in with Google
-          </button>
+          <h6>Admin Login</h6>
         </div>
-        <p id={styles.signup_route}>
-          Are you a new member?
-          <span>
-            <Link href="/signup">Sign up here.</Link>
-          </span>
-        </p>
         <section className={styles.login_section}>
           <Input_component
             LabelName="Email"

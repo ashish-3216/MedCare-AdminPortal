@@ -132,7 +132,7 @@
 import React, { useEffect, useState } from "react";
 import AppointmentCard from "@/components/AppointmentCard";
 import styles from "@/styles/appointment.module.css";
-
+import { toast } from "react-toastify";
 export default function AppointmentsPage() {
   const [appointments, setAppointments] = useState([]);
   const [refresh, setRefresh] = useState(0);
@@ -147,11 +147,11 @@ export default function AppointmentsPage() {
         body: JSON.stringify({ id }),
       });
       if (result.ok) {
-        alert("Appointment Declined");
+        toast.success("Appointment Declined");
         setRefresh((prev) => prev + 1);
       }
     } catch (err) {
-      alert("Cannot decline appointment");
+      toast.error("Cannot decline appointment");
     }
   };
 
@@ -165,11 +165,11 @@ export default function AppointmentsPage() {
       });
 
       if (result.ok) {
-        alert("Appointment Approved");
+        toast.success("Appointment Approved");
         setRefresh((prev) => prev + 1);
       }
     } catch (err) {
-      alert("Cannot approve appointment");
+      toast.error("Cannot approve appointment");
     }
   };
 

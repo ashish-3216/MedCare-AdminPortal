@@ -9,6 +9,7 @@ import Pagination from "@/Components/pagination";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import LogoutButton from "@/components/LogoutButton";
 import Link from "next/link";
+import { toast } from "react-toastify";
 const ITEMS_PER_PAGE = 6; // Number of doctor cards per page
 
 const Page = () => {
@@ -129,10 +130,10 @@ const Page = () => {
         prevDoctors.filter((doctor) => doctor.id !== id)
       );
 
-      alert("Doctor deleted successfully!");
+      toast.success("Doctor deleted successfully!");
     } catch (err) {
       console.error("Error deleting doctor:", err);
-      alert("Failed to delete doctor. Please try again.");
+      toast.error("Failed to delete doctor. Please try again.");
     }
   };
 
