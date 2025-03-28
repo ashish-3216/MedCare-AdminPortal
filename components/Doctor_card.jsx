@@ -1,13 +1,14 @@
 import React from "react";
 import styles from "@/styles/card.module.css";
 const Doctor_card = ({ image_url, Name, role, experience, rating, location , onClick , id }) => {
+  console.log(image_url);
   return (
     <div className={styles.container} style={{ cursor: "pointer" }}>
       <div className={styles.details}>
-        <div
-          className={styles.image_frame}
-          style={{ backgroundImage: `url(${image_url})` }}
-        ></div>
+        <div className={styles.image_frame}>
+            <img src={image_url} alt="Doctor"/>
+        </div>
+
         <div className={styles.title}>
           <p className={styles.name}>{Name}</p>
           <div className={styles.exp}>

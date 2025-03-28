@@ -129,7 +129,7 @@ import Image from "next/image";
 import styles from "../styles/NavBar.module.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useLogin } from "@/components/useAuthHook";
+import { useLogin } from "@/context/LoggedInContext";
 import { usePathname } from "next/navigation";
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -190,34 +190,21 @@ const NavBar = () => {
                 </li>
               </Link>
 
-
-              <Link href="/doctor/appointment" onClick={closeMenu}>
+              <Link href="/appointment" onClick={closeMenu}>
                 <li
                   id={
-                    pathname === "/doctor/appointment" ? styles.activeLink : styles.appointments
+                    pathname === "/appointment" ? styles.activeLink : styles.appointments
                   }
                 >
                   Appointments
                 </li>
               </Link>
-              <Link href="/doctor" onClick={closeMenu}>
-                <li
-                  id={
-                    pathname === "/doctor" ? styles.activeLink : styles.appointments
-                  }
-                >
-                  Doctors
-                </li>
-              </Link>
-              <Link href="/doctor/add">
-              <li
-                  id={
-                    pathname === "/doctor/add" ? styles.activeLink : styles.appointments
-                  }
-                >
-                  Add Doctor
-                </li>
-              </Link>
+              <li id={styles.blog} onClick={closeMenu}>
+                Health Blog
+              </li>
+              <li id={styles.review} onClick={closeMenu}>
+                Reviews
+              </li>
             </ul>
           </div>
 

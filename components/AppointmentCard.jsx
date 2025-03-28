@@ -21,7 +21,9 @@ const AppointmentCard = ({ appointment, onApprove, onDecline }) => (
           appointment.id,
           appointment.appointment_time,
           appointment.appointment_date,
-          appointment.doctor_id
+          appointment.doctor_id,
+          appointment.user_email,
+          appointment.doc_name,
         )
       }
     >

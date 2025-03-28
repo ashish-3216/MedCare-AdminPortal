@@ -1,10 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import styles from "@/styles/addCard.module.css";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import ImageUpload from "@/components/uploadImage";
 
 export default function AddDoctorForm() {
+  const [upload,onUpload] = useState('/default_image.jpg');
   const availabilityOptions = ["9 AM - 12 PM", "1 PM - 5 PM"];
   const [formData, setFormData] = useState({
     doc_name: "",
@@ -15,8 +17,17 @@ export default function AddDoctorForm() {
     description: "",
     doc_location: "",
     gender: "Male",
+    user_img_url : upload
   });
   const router = useRouter();
+
+  useEffect(() => {
+    setFormData((prevData) => ({
+      ...prevData,
+      user_img_url: upload,
+    }));
+  }, [upload]);
+
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -33,9 +44,11 @@ export default function AddDoctorForm() {
       });
 
       const data = await response.json();
+      console.log(upload);
       if (response.ok) {
+        console.log(formData);
         alert("Doctor added successfully!");
-        router.push("/doctors");
+        router.push("/doctor");
       } else {
         alert(data.message);
       }
@@ -47,11 +60,8 @@ export default function AddDoctorForm() {
 
   return (
       <div>
-        <Link href='/doctor'>
-        <button>Doctors Page</button>
-        </Link>
     <div className={styles.container}>
-      <h1>Add Doctor</h1>
+      <h1> ENTER YOUR DETAILS</h1>
       <form onSubmit={handleSubmit} className={styles.form}>
         <label>Doctor Name: <input type="text" name="doc_name" value={formData.doc_name} onChange={handleChange} required /></label>
         <label>Degree: <input type="text" name="doc_degree" value={formData.doc_degree} onChange={handleChange} required /></label>
@@ -68,6 +78,7 @@ export default function AddDoctorForm() {
             <option value="Female">Female</option>
           </select>
         </label>
+        <ImageUpload onUpload={onUpload}/>
         <button type="submit" className={styles.book}>Add Doctor</button>
       </form>
     </div>

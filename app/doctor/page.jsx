@@ -1,6 +1,6 @@
 "use client";
 import Doctor_card from "@/Components/Doctor_card";
-import styles from "@/styles/appointment.module.css";
+import styles from "@/styles/doctor.module.css";
 import React, { useState, useEffect } from "react";
 import Footer from "@/Components/Footer";
 import Filter_component from "@/Components/Filter_component";
@@ -30,6 +30,7 @@ const Page = () => {
         const res = await fetch("http://localhost:5000/api/v1/doctor");
         const result = await res.json();
         setDoctors(result.data);
+        console.log(result.data);
         return;
       } catch (err) {
         console.log(err);
@@ -114,9 +115,9 @@ const Page = () => {
         credentials: "include", // If using cookies or authentication
         body: JSON.stringify({ id }),
       });
-
       if (!res.ok) {
         const errorData = await res.json();
+
         throw new Error(errorData.message || "Failed to delete doctor");
       }
 
@@ -184,15 +185,6 @@ const Page = () => {
             Book appointments with minimum wait-time & verified doctor details
           </p>
         </section>
-        <div>
-          <Link href='/doctor/add'>
-            <button>Add New Doctor</button>
-          </Link>
-          <Link href='/doctor/appointment'>
-            <button>See Appointments</button>
-          </Link>
-          </div>
-
         <section className={styles.main_stats}>
           {/* FILTER SIDEBAR */}
           <aside className={styles.leftBar}>
@@ -248,12 +240,13 @@ const Page = () => {
             {selectedDoctors.map((doctor, index) => (
               <Doctor_card
                 key={doctor.id}
-                image_url={"./Frame.svg"}
+                image_url={doctor.img_url}
                 Name={`${doctor.doc_name}, ${doctor.doc_degree}`}
                 role={doctor.specialization}
                 experience={`${doctor.experience} years`}
                 rating={doctor.rating}
                 onClick={() => deleteDoctor(doctor.id)}
+                
               />
             ))}
           </div>
@@ -266,8 +259,6 @@ const Page = () => {
           onPageChange={setCurrentPage}
         />
       </section>
-
-      <Footer />
     </div>
   );
 };

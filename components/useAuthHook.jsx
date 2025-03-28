@@ -1,30 +1,73 @@
 "use client";
-import { useEffect, useState } from "react";
 
-const useAuth = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
+import { useRouter } from "next/navigation";
+import { createContext, useContext, useState, useEffect } from "react";
 
-  useEffect(() => {
-    const checkAuth = async () => {
+export const LoginContext = createContext();
+
+export const LoginProvider = ({ children }) => {
+    const [user, setUser] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const router = useRouter();
+
+    const fetchUser = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/v1/auth/status", {
-          credentials: "include",
-        });
-        const data = await res.json();
-        if (res.ok && data.user) {
-          setIsAuthenticated(true);
-        }
+          const res = await fetch(`http://localhost:5000/api/v1/auth/status`, {
+              credentials: "include",
+              cache: "no-cache",
+              headers: {
+                  "Cache-Control": "no-cache, no-store, must-revalidate",
+                  Pragma: "no-cache",
+              },
+          });
+  
+          if (res.ok) {
+              const userData = await res.json();
+              const { id, username, email_id } = userData.user;
+              setUser({ user_id: id, user_name: username, user_emailid: email_id });
+          } else {
+              console.log("Not authenticated, clearing user state");
+              setUser(null);
+          }
       } catch (error) {
-        console.error("Error checking auth status:", error);
+          console.error("Failed to fetch user", error);
+          setUser(null);
+      } finally {
+          setIsLoading(false);
       }
-      setLoading(false);
+  };  
+
+    const logout = async () => {
+        try {
+            await fetch("http://localhost:5000/api/v1/auth/logout", {
+                method: "POST",
+                credentials: "include",
+            });
+            setUser(null);
+            router.push("/");
+        } catch (error) {
+            console.error("Logout failed. Please try again.");
+        }
     };
 
-    checkAuth();
-  }, []);
+    useEffect(() => {
+        fetchUser();
+    }, []);
 
-  return { isAuthenticated, loading };
+    if (isLoading) {
+        return null; // Or a loading spinner
+    }
+
+    return (
+        <LoginContext.Provider value={{ user, setUser, fetchUser, logout }}>
+            {children}
+        </LoginContext.Provider>
+    );
 };
 
-export default useAuth;
+export const useLogin = () => {
+    const context = useContext(LoginContext);
+    if (!context) throw new Error("useLogin must be used within a LoginProvider");
+    return context;
+};
