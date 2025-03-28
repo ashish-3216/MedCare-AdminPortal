@@ -4,9 +4,11 @@ import styles from "@/styles/appointment.module.css";
 import React, { useState, useEffect } from "react";
 import Footer from "@/Components/Footer";
 import Filter_component from "@/Components/Filter_component";
-import { useRouter } from "next/navigation";
+import { useRouter ,usePathname } from "next/navigation";
 import Pagination from "@/Components/pagination";
-
+import ProtectedRoute from "@/components/ProtectedRoute";
+import LogoutButton from "@/components/LogoutButton";
+import Link from "next/link";
 const ITEMS_PER_PAGE = 6; // Number of doctor cards per page
 
 const Page = () => {
@@ -20,7 +22,7 @@ const Page = () => {
   const [currentPage, setCurrentPage] = useState(1); // Current pagination page
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
-
+    
   //fetching doctors
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -182,6 +184,14 @@ const Page = () => {
             Book appointments with minimum wait-time & verified doctor details
           </p>
         </section>
+        <div>
+          <Link href='/doctor/add'>
+            <button>Add New Doctor</button>
+          </Link>
+          <Link href='/doctor/appointment'>
+            <button>See Appointments</button>
+          </Link>
+          </div>
 
         <section className={styles.main_stats}>
           {/* FILTER SIDEBAR */}
@@ -208,7 +218,7 @@ const Page = () => {
                 Reset
               </button>
             </div>
-
+            
             <Filter_component
               title="Rating"
               stat="Star"
@@ -232,7 +242,7 @@ const Page = () => {
               cb={(value) => setSelectedGender(value)}
             />
           </aside>
-
+          
           {/* DOCTOR GRID */}
           <div className={styles.doctor_grid}>
             {selectedDoctors.map((doctor, index) => (

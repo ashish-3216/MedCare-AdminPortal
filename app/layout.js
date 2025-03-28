@@ -1,3 +1,4 @@
+import NavBar from "@/components/NavBar";
 import "./globals.css";
 import { Montserrat } from 'next/font/google';
 export const montserrat = Montserrat({
@@ -6,6 +7,7 @@ export const montserrat = Montserrat({
   display:'swap',
   fallback: ['Arial', 'sans-serif'],
 });
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">

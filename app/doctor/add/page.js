@@ -2,6 +2,7 @@
 import { useState } from "react";
 import styles from "@/styles/addCard.module.css";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function AddDoctorForm() {
   const availabilityOptions = ["9 AM - 12 PM", "1 PM - 5 PM"];
@@ -45,6 +46,10 @@ export default function AddDoctorForm() {
   };
 
   return (
+      <div>
+        <Link href='/doctor'>
+        <button>Doctors Page</button>
+        </Link>
     <div className={styles.container}>
       <h1>Add Doctor</h1>
       <form onSubmit={handleSubmit} className={styles.form}>
@@ -53,6 +58,7 @@ export default function AddDoctorForm() {
         <label>Specialization: <input type="text" name="specialization" value={formData.specialization} onChange={handleChange} required /></label>
         <label>Experience (years): <input type="number" name="experience" value={formData.experience} onChange={handleChange} required /></label>
         <label>Rating (1-5): <input type="number" name="rating" value={formData.rating} onChange={handleChange} min="1" max="5" required /></label>
+      
         <label>Description: <textarea name="description" value={formData.description} onChange={handleChange} required /></label>
         <label>Location: <input type="text" name="doc_location" value={formData.doc_location} onChange={handleChange} required /></label>
         
@@ -65,5 +71,6 @@ export default function AddDoctorForm() {
         <button type="submit" className={styles.book}>Add Doctor</button>
       </form>
     </div>
+      </div>
   );
 }
