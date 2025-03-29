@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../styles/LoginPage.module.css";
 import Image from "next/image";
 import Input_component from "./Input_component";
@@ -12,46 +12,47 @@ const LoginComponent = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
- 
-  const { fetchUser } = useLogin();
+
+  const { fetchUser, user, logout } = useLogin();
 
   const handleLogin = async () => {
     try {
+      
       if (!email || !password) {
         return toast.info("Please provide both email and password.");
       }
-      if((!email.includes('@gmail.com')) || (!email.includes('@tothenew.com'))){
-        return toast.info('Currently we will allowed only gmail and tothenew domain for signup/login');
+      if (!email.includes("admin")) {
+        return toast.info("Currently, we only allow admin email");
       }
       const res = await fetch(`http://localhost:5000/api/v1/auth/login`, {
         method: "POST",
         headers: { "content-type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ 
+          email, 
+          password, 
+          AdminFlag: true // This will now be accessible in the strategy
+        }),
       });
 
       const result = await res.json();
 
       if (res.ok) {
-        await fetchUser() ;
+        await fetchUser();
         toast.success("Login successful");
-        router.push("/appointment"); 
+        router.push("/doctor/appointment");
       } else {
-        toast.error(result.message || "Incorrect credentials");
+        toast.error(result.message || "incorrect crendtials or not an admin");
       }
     } catch (err) {
-      console.error("Login error:", err);
-      toast.error("An error occurred. Please try again.");
+      toast.error("Login error:", err);
     }
   };
-
-  
   const handleReset = () => {
     setEmail("");
     setPassword("");
-    toast.success('Reset Successful');
+    toast.success("Reset Successful");
   };
-
 
   return (
     <div className={styles.login}>

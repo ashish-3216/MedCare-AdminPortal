@@ -24,8 +24,8 @@ export const LoginProvider = ({ children }) => {
   
           if (res.ok) {
               const userData = await res.json();
-              const { id, username, email_id } = userData.user;
-              setUser({ user_id: id, user_name: username, user_emailid: email_id });
+              const { id, username, email_id , role } = userData.user;
+              setUser({ user_id: id, user_name: username, user_emailid: email_id , user_role  : role});
           } else {
               console.log("Not authenticated, clearing user state");
               setUser(null);

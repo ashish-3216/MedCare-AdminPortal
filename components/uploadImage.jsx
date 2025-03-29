@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { toast } from "react-toastify";
 const ImageUpload = ({ onUpload }) => {
   const [file, setFile] = useState(null);
 
@@ -26,15 +26,15 @@ const ImageUpload = ({ onUpload }) => {
         const data = await response.json();
         console.log("Uploaded Image:", data);
         onUpload(data.secure_url);
-        alert("Image uploaded successfully!");
+        toast.success("Image uploaded successfully!");
       } else {
         const errorData = await response.json();
         console.error(errorData.error.message);
-        alert(errorData.error.message);
+        toast.error(errorData.error.message);
       }
     } catch (error) {
       console.error("Error uploading image:", error);
-      alert("Failed to upload image.");
+      toast.error("Failed to upload image.");
     }
   };
   return (

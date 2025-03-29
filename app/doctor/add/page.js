@@ -4,7 +4,7 @@ import styles from "@/styles/addCard.module.css";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import ImageUpload from "@/components/uploadImage";
-
+import { toast } from "react-toastify";
 export default function AddDoctorForm() {
   const [upload,onUpload] = useState('/default_image.jpg');
   const availabilityOptions = ["9 AM - 12 PM", "1 PM - 5 PM"];
@@ -47,10 +47,10 @@ export default function AddDoctorForm() {
       console.log(upload);
       if (response.ok) {
         console.log(formData);
-        alert("Doctor added successfully!");
+        toast.success("Doctor added successfully!");
         router.push("/doctor");
       } else {
-        alert(data.message);
+        toast.error(data.message);
       }
     } catch (error) {
       console.error("Error adding doctor:", error);
