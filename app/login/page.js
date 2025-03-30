@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { useEffect } from "react";
-import styles from "@/styles/LoginPage.module.css";
 import { useLogin } from "@/components/useAuthHook";
 import LoginComponent from "@/components/LoginComponent";
 import { useRouter } from "next/navigation";

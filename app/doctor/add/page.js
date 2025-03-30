@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import styles from "@/styles/addCard.module.css";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import ImageUpload from "@/components/uploadImage";
 import { toast } from "react-toastify";
 export default function AddDoctorForm() {

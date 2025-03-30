@@ -5,7 +5,6 @@ import Image from "next/image";
 import Input_component from "./Input_component";
 import Button_component from "./Button_component";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { useLogin } from "@/components/useAuthHook";
 import { toast } from "react-toastify";
 const LoginComponent = () => {

@@ -13,6 +13,10 @@ import { LoginProvider } from "@/components/useAuthHook";
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <link rel='icon' href="/medcare_logo.png"/>
+        <title>MedCare Admin</title>
+      </head>
       <body className={montserrat.className}>
         <LoginProvider>
           <NavBar />

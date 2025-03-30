@@ -2,13 +2,9 @@
 import Doctor_card from "@/Components/Doctor_card";
 import styles from "@/styles/doctor.module.css";
 import React, { useState, useEffect } from "react";
-import Footer from "@/Components/Footer";
 import Filter_component from "@/Components/Filter_component";
 import { useRouter ,usePathname } from "next/navigation";
 import Pagination from "@/Components/pagination";
-import ProtectedRoute from "@/components/ProtectedRoute";
-import LogoutButton from "@/components/LogoutButton";
-import Link from "next/link";
 import { toast } from "react-toastify";
 const ITEMS_PER_PAGE = 6; // Number of doctor cards per page
 
