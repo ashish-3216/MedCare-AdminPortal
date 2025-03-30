@@ -128,24 +128,32 @@
 //   );
 // }
 
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
 import AppointmentCard from "@/components/AppointmentCard";
+import { RiUserSearchLine } from "react-icons/ri";
 import styles from "@/styles/appointment.module.css";
+import InputComponent from "@/components/Input_component";
+import Button_component from "@/components/Button_component";
 import { toast } from "react-toastify";
 export default function AppointmentsPage() {
   const [appointments, setAppointments] = useState([]);
   const [refresh, setRefresh] = useState(0);
   const [filter, setFilter] = useState("all");
+  const [query, setQuery] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const onDecline = async (id) => {
     try {
-      const result = await fetch(`http://localhost:5000/api/v1/bookappointment/decline`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ id }),
-      });
+      const result = await fetch(
+        `http://localhost:5000/api/v1/bookappointment/decline`,
+        {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ id }),
+        }
+      );
       if (result.ok) {
         toast.success("Appointment Declined");
         setRefresh((prev) => prev + 1);
@@ -155,14 +163,31 @@ export default function AppointmentsPage() {
     }
   };
 
-  const onApprove = async (id, appointment_time, appointment_date, doctor_id, user_email, doc_name) => {
+  const onApprove = async (
+    id,
+    appointment_time,
+    appointment_date,
+    doctor_id,
+    user_email,
+    doc_name
+  ) => {
     try {
-      const result = await fetch(`http://localhost:5000/api/v1/bookappointment/approve`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ id, appointment_time, appointment_date, doctor_id, user_email, doc_name }),
-      });
+      const result = await fetch(
+        `http://localhost:5000/api/v1/bookappointment/approve`,
+        {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            id,
+            appointment_time,
+            appointment_date,
+            doctor_id,
+            user_email,
+            doc_name,
+          }),
+        }
+      );
 
       if (result.ok) {
         toast.success("Appointment Approved");
@@ -175,7 +200,9 @@ export default function AppointmentsPage() {
 
   const fetchAppointment = async () => {
     try {
-      const result = await fetch(`http://localhost:5000/api/v1/bookappointment/appointments`);
+      const result = await fetch(
+        `http://localhost:5000/api/v1/bookappointment/appointments`
+      );
       const res = await result.json();
       setAppointments(res.data);
     } catch (err) {
@@ -187,16 +214,37 @@ export default function AppointmentsPage() {
     fetchAppointment();
   }, [refresh]);
 
-  const filteredAppointments = appointments.filter((appointment) =>
-    filter === "all" ? true : appointment.status === filter
-  );
-
+  const filteredAppointments = appointments.filter((appointment) => {
+    const matchesStatus = filter === "all" || appointment.status === filter;
+    const matchesQuery = query === "" || appointment.doc_name.toLowerCase().includes(query);
+    return matchesStatus && matchesQuery;
+  });
   return (
     <div className={styles.container}>
       {/* Sidebar */}
       <aside className={styles.sidebar}>
+        <div className={styles.searchContainer}>
+          <input
+            type="text"
+            placeholder="Search doctors"
+            className={styles.searchInput}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value.toLowerCase())} // ✅ Update search input
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                setQuery(searchTerm); // ✅ Pressing Enter triggers search
+              }
+            }}
+          />
+          <button
+            className={styles.searchButton}
+            onClick={() => setQuery(searchTerm.toLowerCase())}
+          >
+            Search
+          </button>
+        </div>
         <ul>
-          {['all', 'Pending', 'approved', 'decline'].map((status) => (
+          {["all", "Pending", "approved", "decline"].map((status) => (
             <li
               key={status}
               className={filter === status ? styles.active : styles.item}
@@ -210,7 +258,7 @@ export default function AppointmentsPage() {
 
       {/* Main Content */}
       <div className={styles.content}>
-        {filteredAppointments.map((appointment) => (
+        {filteredAppointments.length > 0 && filteredAppointments.map((appointment) => (
           <AppointmentCard
             key={appointment.id}
             appointment={appointment}
