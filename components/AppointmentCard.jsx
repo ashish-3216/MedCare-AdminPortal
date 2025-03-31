@@ -2,8 +2,8 @@ import styles from "@/styles/AppointmentCard.module.css";
 
 const AppointmentCard = ({ appointment, onApprove, onDecline }) => (
   <div className={styles.card}>
-    <h3>{appointment.username}</h3>
-    <p>Doctor: {appointment.doc_name}</p>
+    <h3>Patient : {appointment.username}</h3>
+    <b><p>Doctor: {appointment.doc_name}</p></b>
     {appointment.type === "offline" && <p>Location: {appointment.location}</p>}
     <p>Type : {appointment.type}</p>
     <p>Date: {appointment.appointment_date}</p>
