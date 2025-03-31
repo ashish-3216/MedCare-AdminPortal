@@ -225,9 +225,6 @@ const NavBar = () => {
             <Link href="/login" onClick={closeMenu}>
               <button className={styles.login}>Login</button>
             </Link>
-            <Link href="/signup" onClick={closeMenu}>
-              <button className={styles.register}>Register</button>
-            </Link>
           </div>
         </div>
       </div>
@@ -241,9 +238,6 @@ const NavBar = () => {
           <>
             <Link href="/login">
               <button className={styles.login}>Login</button>
-            </Link>
-            <Link href="/signup">
-              <button className={styles.register}>Register</button>
             </Link>
           </>
         )}
